@@ -1,29 +1,29 @@
 ---
-# Source: ui-deploy/templates/service.yaml
+# Source: env-deployments/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: ui-service
   labels:
     app: react-ui
-    env: prod
+    env: dev
 spec:
   ports:
-  - name: http
-    port: 8080
-    targetPort: 8080
+    - name: http
+      port: 8080
+      targetPort: 8080
   selector:
     app: react-ui
   type: NodePort
 ---
-# Source: ui-deploy/templates/deployment.yaml
+# Source: env-deployments/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: react-ui-dep
   labels:
     app: react-ui
-    env: prod
+    env: dev
 spec:
   replicas: 4
   selector:
@@ -33,7 +33,7 @@ spec:
     metadata:
       labels:
         app: react-ui
-        env: prod
+        env: dev
     spec:
       containers:
         - name: react-ui
@@ -41,23 +41,23 @@ spec:
           imagePullPolicy: IfNotPresent
           resources:
             limits:
-              cpu: 0.5
-              memory: 2Gi
+              cpu: 0.2
+              memory: 500Mi
             requests:
-              cpu: 0.5
-              memory: 2Gi
+              cpu: 0.2
+              memory: 500Mi
 ---
-# Source: ui-deploy/templates/hpa.yaml
+# Source: env-deployments/templates/hpa.yaml
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
   annotations:
     app: react-ui
-    env: prod
+    env: dev
 spec:
   maxReplicas: 10
   minReplicas: 4
-  scaleTargetRef: 
+  scaleTargetRef:
     apiVersion: extensions/v1
     kind: Deployment
     name: react-ui

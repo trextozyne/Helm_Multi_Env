@@ -4,20 +4,21 @@ kind: Deployment
 metadata:
   name: react-ui-dep
   labels:
-   {{- include "ui.labels" . | nindent 4 }}
+    {{- include "env.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.app.replicas }}
+  replicas: {{.Values.app.replicas}}
   selector:
     matchLabels:
       app: react-ui
   template:
     metadata:
       labels:
-     {{- include "ui.labels" . | nindent 8 }}
+        {{- include "env.labels" . | nindent 8 }}
     spec:
       containers:
         - name: react-ui
           image: {{ .Values.app.image }}
           imagePullPolicy: IfNotPresent
           resources:
-          {{- toYaml .Values.app.computeres | nindent 12 }}
+          {{- toYaml .Values.app.resources | nindent 12 }}
+
